@@ -1,0 +1,39 @@
+name: Deploy Bot to EC2
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          cd ~/polymarket-bot
+          
+          # Pull latest code
+          git pull origin main || git clone https://github.com/qdibs/polymarket-bot.git ~/polymarket-bot
+          cd ~/polymarket-bot
+          git pull origin main
+          
+          # Create virtual environment if not exists
+          python3 -m venv venv || true
+          
+          # Install dependencies
+          source venv/bin/activate
+          pip install -r requirements.txt
+          
+          # Restart PM2
+          pm2 restart polymarket-bot || pm2 start venv/bin/python --name "polymarket-bot" -- bot.py
+          pm2 save
