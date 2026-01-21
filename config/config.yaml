@@ -1,0 +1,70 @@
+# Polymarket Bot Configuration
+
+# API Settings
+# -----------------------------------------------------------------------------
+# Host URL for the Polymarket CLOB API
+host: "https://clob.polymarket.com"
+
+# Polygon chain ID (137 for mainnet)
+chain_id: 137
+
+# Trading settings (requires private key in .env file)
+# -----------------------------------------------------------------------------
+# Set to true to enable trading, false for read-only mode
+trading_enabled: true
+
+# Signature type for your wallet
+# 0: Standard EOA (MetaMask, hardware wallets)
+# 1: Email/Magic wallet (default)
+# 2: Browser wallet proxy
+signature_type: 1
+
+# Risk Management
+# -----------------------------------------------------------------------------
+# Maximum position size in USDC for a single market
+max_position_size: 50.0
+
+# Maximum number of concurrent open positions
+max_open_positions: 5
+
+# Maximum daily loss in USDC. Bot will stop trading if this is reached.
+max_daily_loss: 25.0
+
+# Target daily return percentage (e.g., 0.02 for 2%). Bot will stop if reached.
+target_daily_return: 0.02
+
+# Minimum acceptable edge for value bets (e.g., 0.05 for 5%)
+min_edge: 0.05
+
+# Kelly Criterion fraction (0.25 = quarter Kelly for safety)
+kelly_fraction: 0.25
+
+# Strategy Settings
+# -----------------------------------------------------------------------------
+# Enable or disable specific strategies
+strategies:
+  arbitrage:
+    enabled: true
+    min_profit_pct: 0.8  # Minimum 0.8% profit for arbitrage
+  value_betting:
+    enabled: true
+    # External probability sources can be configured here
+    # (e.g., API endpoints for prediction models)
+    external_sources: {}
+  momentum:
+    enabled: false # Requires historical data tracking
+  high_quality_markets:
+    enabled: true
+    min_volume: 5000
+    min_quality_score: 60
+
+# Bot Operation
+# -----------------------------------------------------------------------------
+# Time in seconds between each trading cycle
+run_interval_seconds: 60
+
+# Log level (DEBUG, INFO, WARNING, ERROR)
+log_level: "INFO"
+
+# Data directory for logs and reports
+data_dir: "data"
