@@ -59,7 +59,7 @@ class PolymarketClient:
             List of market dictionaries
         """
         try:
-            response = self.client.get_simplified_markets(limit=limit, offset=offset)
+            response = self.client.get_simplified_markets()
             return response.get('data', [])
         except Exception as e:
             self.logger.error(f"Error fetching markets: {e}")
